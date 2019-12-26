@@ -69,3 +69,52 @@ func TestPOST(t *testing.T) {
 		})
 	}
 }
+
+type testPUT struct {
+	Status int
+	URL    string
+	Body   string
+}
+
+var listTestPUT []testPUT = []testPUT{
+	{200, baseURL + "/users/1", `{"miaw", "lala"}`},
+	{200, baseURL + "/users/2", `{"miao", "lili"}`},
+	{200, baseURL + "/users/3", `{"meow", "lulu"}`},
+	{200, baseURL + "/users/4", `{"miau", "lele"}`},
+	{200, baseURL + "/users/5", `{"meou", "lolo"}`},
+}
+
+func TestPUT(t *testing.T) {
+	for i, value := range listTestPUT {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			res := request.PUT(value.URL, value.Body, nil)
+			if res.StatusCode != value.Status {
+				t.Fatalf("\nexpected :\n\tstatus -> %d\ngot :\n\tstatus -> %d", value.Status, res.StatusCode)
+			}
+		})
+	}
+}
+
+type testDELETE struct {
+	Status int
+	URL    string
+}
+
+var listTestDELETE []testDELETE = []testDELETE{
+	{204, baseURL + "/users/1"},
+	{204, baseURL + "/users/2"},
+	{204, baseURL + "/users/3"},
+	{204, baseURL + "/users/4"},
+	{204, baseURL + "/users/5"},
+}
+
+func TestDELETE(t *testing.T) {
+	for i, value := range listTestDELETE {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			res := request.DELETE(value.URL, nil)
+			if res.StatusCode != value.Status {
+				t.Fatalf("\nexpected :\n\tstatus -> %d\ngot :\n\tstatus -> %d", value.Status, res.StatusCode)
+			}
+		})
+	}
+}
